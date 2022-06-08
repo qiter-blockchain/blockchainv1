@@ -56,9 +56,16 @@ func NewBlockChain() *BlockChain {
 	return &bc
 }
 
-func (bc *BlockChain) AddBlock() {
+// 添加区块
+func (bc *BlockChain) AddBlock(data string) {
 	// 1.创建一个区块
+	//bc.Blocks的最后一个区块的Hash值就是当前新区块的PrevBlockHash
+	lastBlock := bc.Blocks[len(bc.Blocks)-1]
+	prevHash := lastBlock.Hash
+
+	block := NewBlock(data, prevHash)
 	// 2.添加到bc.Blocks数组中
+	bc.Blocks = append(bc.Blocks, block)
 }
 
 func main() {
@@ -66,7 +73,9 @@ func main() {
 	// block := NewBlock(genesisInfo, []byte{0x0000000000000})
 
 	bc := NewBlockChain()
-	for _, block := range bc.Blocks {
+	bc.AddBlock("what's?")
+	for i, block := range bc.Blocks {
+		fmt.Printf("**************%d******************\n", i)
 		fmt.Printf("PrevBlockHash = %x\n", block.PrevBlockHash)
 		fmt.Printf("Hash = %x\n", block.Hash)
 		fmt.Printf("data = %s\n", block.Data)
